@@ -1,0 +1,26 @@
+dist: xenial
+language: python
+
+addons:
+  apt:
+    packages:
+    - libsane-dev
+
+# No tests: just check it can build and install
+script:
+ - python setup.py build
+ - python setup.py install
+
+after_script:
+ - pip install pycodestyle pyflakes
+ - pycodestyle --statistics --count .
+ - pyflakes . | tee >(wc -l)
+
+matrix:
+  fast_finish: true
+  include:
+    - python: pypy3
+    - python: 3.5
+    - python: 3.6
+    - python: 3.7
+    - python: 3.8
